@@ -6,6 +6,10 @@ The terms and conditions for this API are available at http://developer.spotify.
 
 Some of the code in this class was derived from the metatune library available at http://code.google.com/p/metatune/
 
+## Prerequisites
+
+This class requires the following PHP modules to operate: SimpleXML and cURL
+
 ## Usage
 
 The API has search and lookup functions for artists, albums, and tracks.
