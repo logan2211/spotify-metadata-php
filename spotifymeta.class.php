@@ -198,6 +198,7 @@ class Spotify {
 			foreach ($xml->tracks->track as $t) {
 				$track = $this->populateTrack($t);
 				$track->album = clone $album;
+				$track->album->tracks = null;
 				$album->tracks[] = $track;
 			}
 		}
