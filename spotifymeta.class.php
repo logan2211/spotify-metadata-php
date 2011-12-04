@@ -3,6 +3,8 @@ class Spotify {
 	const URL_SEARCH = "http://ws.spotify.com/search/1/";
 	const URL_LOOKUP = "http://ws.spotify.com/lookup/1/";
 	
+	public $lookup_retries = 10;
+	
 	private $c; //curl instance
 	private $response; //raw response from spotify
 	
@@ -51,7 +53,17 @@ class Spotify {
 		$c =& $this->c;
 		$url = $this->getSearchURL($type, $search, $page);
 		curl_setopt($c, CURLOPT_URL, $url);
-		$output = curl_exec($c);
+		
+		$i=0;
+		while (1) {
+			$i++;
+			if ($i >= $this->lookup_retries) throw new Exception('Too many lookup retries');
+			
+			$output = curl_exec($c);
+			$last_code = curl_getinfo($c, CURLINFO_HTTP_CODE);
+			if ($last_code == 200) break;
+			else if ($last_code == 403) sleep(10);
+		}
 		$xml = new SimpleXMLElement($output);
 		return $xml;
 	}
@@ -79,7 +91,17 @@ class Spotify {
 		$c =& $this->c;
 		$url = $this->getLookupURL($uri, $extras);
 		curl_setopt($c, CURLOPT_URL, $url);
-		$output = curl_exec($c);
+		
+		$i=0;
+		while (1) {
+			$i++;
+			if ($i >= $this->lookup_retries) throw new Exception('Too many lookup retries');
+			
+			$output = curl_exec($c);
+			$last_code = curl_getinfo($c, CURLINFO_HTTP_CODE);
+			if ($last_code == 200) break;
+			else if ($last_code == 403) sleep(10);
+		}
 		$xml = new SimpleXMLElement($output);
 		return $xml;
 	}
