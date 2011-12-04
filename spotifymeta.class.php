@@ -3,7 +3,7 @@ class Spotify {
 	const URL_SEARCH = "http://ws.spotify.com/search/1/";
 	const URL_LOOKUP = "http://ws.spotify.com/lookup/1/";
 	
-	public $lookup_retries = 10;
+	public $api_retries = 10;
 	
 	private $c; //curl instance
 	private $response; //raw response from spotify
@@ -50,21 +50,8 @@ class Spotify {
 	}
 	
 	private function perform_search($type, $search, $page) {
-		$c =& $this->c;
 		$url = $this->getSearchURL($type, $search, $page);
-		curl_setopt($c, CURLOPT_URL, $url);
-		
-		$i=0;
-		while (1) {
-			$i++;
-			if ($i >= $this->lookup_retries) throw new Exception('Too many lookup retries');
-			
-			$output = curl_exec($c);
-			$last_code = curl_getinfo($c, CURLINFO_HTTP_CODE);
-			if ($last_code == 200) break;
-			else if ($last_code == 403) sleep(10);
-		}
-		$xml = new SimpleXMLElement($output);
+		$xml = $this->perform_apicall($url);
 		return $xml;
 	}
 	
@@ -88,14 +75,19 @@ class Spotify {
 	}
 	
 	private function perform_lookup($uri, $extras=null) {
-		$c =& $this->c;
 		$url = $this->getLookupURL($uri, $extras);
+		$xml = $this->perform_apicall($url);
+		return $xml;
+	}
+	
+	private function perform_apicall($url) {
+		$c =& $this->c;
 		curl_setopt($c, CURLOPT_URL, $url);
 		
 		$i=0;
 		while (1) {
 			$i++;
-			if ($i >= $this->lookup_retries) throw new Exception('Too many lookup retries');
+			if ($i >= $this->api_retries) throw new Exception('Too many API retries');
 			
 			$output = curl_exec($c);
 			$last_code = curl_getinfo($c, CURLINFO_HTTP_CODE);
