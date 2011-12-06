@@ -210,7 +210,7 @@ class Spotify {
 	}
 }
 
-class Track extends Spotify {
+class Track {
 	public $href = NULL;
 	public $name = NULL;
 	public $track_number = NULL;
@@ -221,8 +221,6 @@ class Track extends Spotify {
 	public $artist = NULL;
 	
 	public $available_countries  = array();
-	
-	public function __construct() { } //no initialization is needed
 	
 	public function __toString() {
 		$string = '';
@@ -239,7 +237,7 @@ class Track extends Spotify {
 	}
 }
 
-class Album extends Spotify {
+class Album {
 	public $name = NULL;
 	public $href = NULL;
 	public $released = NULL;
@@ -250,8 +248,6 @@ class Album extends Spotify {
 	
 	public $available_countries  = array();
 	
-	public function __construct() { } //no initialization is needed
-	
 	public function __toString() {
 		$string = $this->artist->name.' - '.$this->name;
 		if (!empty($this->released)) $string .= " ({$this->released})";
@@ -259,13 +255,11 @@ class Album extends Spotify {
 	}
 }
 
-class Artist extends Spotify {
+class Artist {
 	public $name = NULL;
 	public $href = NULL;
 	public $popularity = NULL;
 	
 	public $albums = array();
-	
-	public function __construct() { } //no initialization is needed
 }
 ?>
