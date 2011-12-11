@@ -55,6 +55,21 @@ class Spotify {
 		return $xml;
 	}
 	
+	public function lookup($uri) {
+		$split = explode(':', $uri);
+		$type = $split[1];
+		switch ($type) {
+			case 'track':
+				return $this->lookupTrack($uri);
+			case 'artist':
+				return $this->lookupArtist($uri);
+			case 'album':
+				return $this->lookupAlbum($uri);
+			default:
+				throw new Exception('Lookup failed. Invalid URI.');
+		}
+	}
+	
 	public function lookupTrack($uri) {
 		$xml = $this->perform_lookup($uri);
 		return $this->populateTrack($xml);

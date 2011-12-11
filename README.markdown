@@ -22,18 +22,21 @@ To use the lookup features of this class, call:
 	Spotify::lookupAlbum(uri)
 	Spotify::lookupTrack(uri)
 	
+	You can also use the generic lookup function:
+	Spotify::lookup(uri)
+	
 Example script:
 
 	include('spotify.class.php');
 	$spotify = new Spotify;
-	$artist = $spotify->lookupArtist('spotify:artist:4YrKBkKSVeqDamzBPWVnSJ');
+	$artist = $spotify->lookup('spotify:artist:4YrKBkKSVeqDamzBPWVnSJ');
 	print_r($artist);
 	
 Another example to list all tracks on an album. The DAO for track and album both support toString()
 
 	include('spotify.class.php');
 	$spotify = new Spotify;
-	$album = $spotify->lookupAlbum('spotify:album:4JKPD5CoWpBbzf2WwokRSp');
+	$album = $spotify->lookup('spotify:album:4JKPD5CoWpBbzf2WwokRSp');
 	foreach ($album->tracks as $track) {
 		echo $track."\n";
 	}
